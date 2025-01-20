@@ -1,14 +1,18 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db.js');
+const connectDB = require('./config/db');
 
-dotenv.config()
+dotenv.config();
+connectDB();
 
 const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
 
-connectDB();
+const userRoutes = require('./routes/userRoute');
 
-app.listen(PORT , () => console.log('listening on port ' + PORT));
+app.use('/api/users', userRoutes);
+// app.use('/api/finance', financeRoutes);
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
