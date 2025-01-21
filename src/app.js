@@ -11,8 +11,8 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 const userRoutes = require('./routes/userRoute');
+const financeRoutes = require('./routes/financeRoute');
 
 app.use('/api/users', userRoutes);
-// app.use('/api/finance', financeRoutes);
-
+app.use('/api/finances', financeRoutes);
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
