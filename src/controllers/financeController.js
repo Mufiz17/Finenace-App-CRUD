@@ -99,10 +99,36 @@ const getFinanceReport = async (req, res) => {
   }
 };
 
+// year filter
+const getFinancesByDate = async (req, res) => {
+  const { date } = req.params; // Ambil parameter date
+  const userId = req.user.id; // Pastikan req.user.id terisi oleh middleware
+
+  try {
+    // Filter berdasarkan tahun
+    const finances = await finance.find({
+      user: userId,
+      createdAt: {
+        $gte: new Date(`${date}-01-01`),
+        $lte: new Date(`${date}-12-31`),
+      },
+    });
+
+    if (finances.length === 0) {
+      return res.status(404).json({ message: "Data tidak ditemukan" });
+    }
+
+    res.status(200).json(finances);
+  } catch (err) {
+    res.status(500).json({ message: "Terjadi kesalahan server", error: err.message });
+  }
+};
+
 module.exports = {
   getFinances,
   createFinance,
   updateFinance,
   deleteFinance,
   getFinanceReport,
+  getFinancesByDate,
 };
