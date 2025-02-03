@@ -10,7 +10,7 @@ const getFinances = async (req, res) => {
 };
 
 const createFinance = async (req, res) => {
-  const { title, amount, type } = req.body;
+  const { title, amount, type, category } = req.body;
 
   if (!title || !amount || !type) {
     return res.status(400).json({ message: "Semua field harus diisi" });
@@ -22,6 +22,7 @@ const createFinance = async (req, res) => {
       title,
       amount,
       type,
+      category,
     });
 
     res.status(201).json(Finance);
@@ -120,7 +121,24 @@ const getFinancesByDate = async (req, res) => {
 
     res.status(200).json(finances);
   } catch (err) {
-    res.status(500).json({ message: "Terjadi kesalahan server", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Terjadi kesalahan server", error: err.message });
+  }
+};
+
+// get Category
+const getCategories = async (req, res) => {
+  try {
+    const categories = await finance.find({
+      user: userId,
+      category: { $exists: true },
+    });
+    res.status(200).json(categories);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Terjadi kesalahan server", error: err.message });
   }
 };
 
@@ -131,4 +149,5 @@ module.exports = {
   deleteFinance,
   getFinanceReport,
   getFinancesByDate,
+  getCategories
 };
